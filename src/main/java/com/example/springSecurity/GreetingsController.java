@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class GreetingsController {
     @GetMapping("/start")
     public String greet() {
-        return "bismillah,   alhamdulillah";
+        return "sn .................. tesing";
     }
 }
