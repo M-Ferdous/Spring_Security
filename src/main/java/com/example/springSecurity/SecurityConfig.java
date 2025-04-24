@@ -3,6 +3,7 @@ package com.example.springSecurity;
 import com.example.springSecurity.jwt.AuthEntryPointJwt;
 import com.example.springSecurity.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -71,29 +72,36 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
 
-        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-        if (!userDetailsManager.userExists("user1")) {
-            userDetailsManager.createUser(
-                    User.withUsername("user1")
-                            .password(passwordEncoder().encode("password23"))
-                            .roles("USER")
-                            .build()
-            );
-        }
-
-        if (!userDetailsManager.userExists("admin")) {
-            userDetailsManager.createUser(
-                    User.withUsername("admin")
-                            .password(passwordEncoder().encode("1234"))
-                            .roles("ADMIN")
-                            .build()
-            );
-        }
-
-        return userDetailsManager;
+        return new JdbcUserDetailsManager(dataSource);
     }
 
+
     @Bean
+    public CommandLineRunner initData(UserDetailsService userDetailsService) {
+        return args -> {
+            JdbcUserDetailsManager userDetailsManager = (JdbcUserDetailsManager) userDetailsService;
+            if (!userDetailsManager.userExists("user1")) {
+                userDetailsManager.createUser(
+                        User.withUsername("user1")
+                                .password(passwordEncoder().encode("password23"))
+                                .roles("USER")
+                                .build()
+                );
+            }
+
+            if (!userDetailsManager.userExists("admin")) {
+                userDetailsManager.createUser(
+                        User.withUsername("admin")
+                                .password(passwordEncoder().encode("1234"))
+                                .roles("ADMIN")
+                                .build()
+                );
+            }
+
+
+        };
+    }
+        @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
