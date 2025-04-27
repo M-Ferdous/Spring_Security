@@ -34,7 +34,7 @@ public class GreetingsController {
 
     @GetMapping("/start")
     public String greet() {
-        return "sn..learning spring security .... tesing";
+        return "learning spring security .... ";
     }
 
     @PreAuthorize("hasRole('USER')")
