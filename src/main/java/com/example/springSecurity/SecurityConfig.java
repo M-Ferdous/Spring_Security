@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -83,7 +84,7 @@ public class SecurityConfig {
             if (!userDetailsManager.userExists("user1")) {
                 userDetailsManager.createUser(
                         User.withUsername("user1")
-                                .password(passwordEncoder().encode("password23"))
+                                .password(passwordEncoder().encode("password1"))
                                 .roles("USER")
                                 .build()
                 );
@@ -101,10 +102,12 @@ public class SecurityConfig {
 
         };
     }
-        @Bean
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+        //return NoOpPasswordEncoder.getInstance();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
